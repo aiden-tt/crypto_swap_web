@@ -230,9 +230,9 @@ const Swap = (props) => {
     );
   };
 
-  const getShopInfo = async (id, domain) => {
+  const getShopInfo = async (id, type) => {
     try {
-      const res = await fetch(`/api/open/shop/info?shop=${id}&type=${domain}`, {
+      const res = await fetch(`/api/open/shop/info?shop=${id}&type=${type}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -253,7 +253,7 @@ const Swap = (props) => {
       const response = await fetch("/config.json");
       const data = await response.json();
       if (data?.shopId) {
-        getShopInfo(data?.shopId, data?.domain);
+        getShopInfo(data?.shopId, data?.type);
       }
     };
     fetchConfig();
