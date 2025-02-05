@@ -306,16 +306,14 @@ const Swap = (props) => {
   return (
     <div className="swap">
       {contextHolder}
-      <div className="w-full max-w-[600px] mx-auto px-4 py-8 text-center">
-          <h2 className="font-bold text-[30px]">Swap $BONK anytime, anywhere! </h2>
-          {/* <p className="mt-10 text-[14px] text-[#676565]">
-            Secure and hassle-free fiat-to-crypto conversion is now available for $OSAKarb on Arbitrum L2. Easily
-            purchase with your preferred payment method and enjoy fast transactions with low fees.
+      <div className="w-full max-w-[800px] mx-auto px-4 py-8 text-center">
+          <h2 className="font-bold text-[30px] text-[#ffffff]">REKT Token launches on Arbitrum l2 - Now with Fiat
+          Purchase Support!</h2>
+          <p className="mt-10 text-[14px] text-[#676565]">
+          Get ready! $REkTarb is making its grand debut on Arbitrum L2, offering lightning-fast transactions and lower fees. The best part? You can now buy $REKTarb directly with fiat, making it easier than ever to jump in and be part of the action!
           </p>
-          <p className="mt-10 mb-10 text-[#676565]">Why choose us?</p>
-          <p className="mt-4 text-[#676565]">✔ Instant transactions</p>
-          <p className="mt-4 text-[#676565]">✔ Secure payment processing</p>
-          <p className="mt-4 text-[#676565]">✔ Competitive exchange rates</p> */}
+          <p className="mt-10 mb-10 text-[#676565]"></p>
+
         </div>
       <div className="swap_container">
         

@@ -14,7 +14,8 @@ body {
   height: 100%;
   display: flex;
   justify-content: center;
-  background: url('/bg-lakehouse-2000.webp') no-repeat center;
+  background-color: #000;
+  // background: url('/bg-lakehouse-2000.webp') no-repeat center;
   background-size: cover;
   flex-direction: column;
   align-items: center;
@@ -188,13 +189,13 @@ body {
   align-items: center;
   justify-content: center;
   // background: rgb(252, 114, 255);
-  background: #0052FF;
-  color: #fff;
+  background: #c9d904;
+  color: #000;
   cursor: pointer;
   border-radius: 20px;
 }
 .swap .swap_container .btn_container .review:hover {
-  background: #0052FF;
+  background: #c9d904;
   // background: rgb(253, 60, 254);
 }
 .swap .swap_container .btn_container .review:focus, .swap .swap_container .btn_container .review:active {
@@ -462,14 +463,14 @@ body {
   font-size: 18px;
   border-radius: 16px;
   background: rgb(252, 114, 255);
-  background: #0052FF;
+  background: #c9d904;
   margin-top: 24px;
-  color: #fff;
+  color: #000;
   cursor: pointer;
 }
 .confim_modal .confim_btn:hover {
   // background: rgb(253, 60, 254);
-  background: #0052FF;
+  background: #c9d904;
 }
 .confim_modal .confim_btn:focus, .confim_modal .confim_btn:active {
   transform: scale(0.98);
@@ -480,7 +481,7 @@ body {
   .swap {
     /* background: #222; */
     padding:0 10px;
-    background: url('/bg-lakehouse-2000.webp') no-repeat center;
+    // background: url('/bg-lakehouse-2000.webp') no-repeat center;
     background-size: cover;
   }
   .swap .swap_container {
@@ -612,15 +613,15 @@ body {
 }
 .token_selection .show_token_no_data {
   padding: 0 12px;
-  background: #0052FF;
-  color: #fff;
+  background: #c9d904;
+  color: #000;
   cursor: pointer;
   border-radius: 18px;
   border: none;
 }
 .token_selection .show_token_no_data:hover {
   // background: rgb(253, 60, 254);
-  background: #0052FF;
+  background: #c9d904;
 }
 .token_selection .show_token_no_data:focus, .token_selection .show_token_no_data:active {
   transform: scale(0.98);
