@@ -343,6 +343,8 @@ const Swap = (props) => {
             </div>
             <div className="value_curr">
               <div className="flex align_center justify_center">
+              { buyToken?.currency === 'USD' && <img src='/images/common/usd.svg' alt="" className="w-[32px] h-[32px]" /> }
+              { buyToken?.currency === 'EUR' && <img src='/images/common/eur.svg' alt="" className="w-[32px] h-[32px]" /> }
                 <div className="ml-6 text-[20px] h-[32px] leading-[32px]">{buyToken?.currency}</div>
               </div>
               {/* <TokenSelection
