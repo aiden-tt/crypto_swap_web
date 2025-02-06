@@ -14,7 +14,8 @@ body {
   height: 100%;
   display: flex;
   justify-content: center;
-  background: url('/bg-lakehouse-2000.webp') no-repeat center;
+  background-color: #ffffff;
+  // background: url('/bg-lakehouse-2000.webp') no-repeat center;
   background-size: cover;
   flex-direction: column;
   align-items: center;
@@ -92,7 +93,7 @@ body {
   padding: 4px 6px;
   border-radius: 12px;
   background-color: rgb(254, 244, 255);
-  color: #fc72ff;
+  color: #11100e;
   margin-left: 4px;
 }
 .swap .swap_container .card .money_curr .money_num .money_max:hover {
@@ -159,7 +160,7 @@ body {
   justify-content: center;
   background: rgb(254, 244, 255);
   border-radius: 20px;
-  color: #fc72ff;
+  color: #11100e;
   transition: all 0.1s ease-in-out;
   cursor: pointer;
 }
@@ -187,13 +188,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(252, 114, 255);
+  background: #11100e;
   color: #fff;
   cursor: pointer;
   border-radius: 20px;
 }
 .swap .swap_container .btn_container .review:hover {
-  background: rgb(253, 60, 254);
+  // background: rgb(253, 60, 254);
+  background: #11100e;
 }
 .swap .swap_container .btn_container .review:focus, .swap .swap_container .btn_container .review:active {
   transform: scale(0.98);
@@ -279,7 +281,7 @@ body {
 }
 .swap_tip a {
   display: inline-block;
-  color: #fc72ff;
+  color: #11100e;
   margin-top: 5px;
 }
 .swap_tip a:hover {
@@ -343,7 +345,7 @@ body {
   padding: 0px 6px;
   border-radius: 12px;
   background-color: rgb(254, 244, 255);
-  color: #fc72ff;
+  color: #11100e;
   margin-right: 4px;
   cursor: pointer;
 }
@@ -459,13 +461,14 @@ body {
   line-height: 59px;
   font-size: 18px;
   border-radius: 16px;
-  background: rgb(252, 114, 255);
+  background: #11100e;
   margin-top: 24px;
   color: #fff;
   cursor: pointer;
 }
 .confim_modal .confim_btn:hover {
   background: rgb(253, 60, 254);
+  background: #11100e;
 }
 .confim_modal .confim_btn:focus, .confim_modal .confim_btn:active {
   transform: scale(0.98);
@@ -476,7 +479,7 @@ body {
   .swap {
     /* background: #222; */
     padding:0 10px;
-    background: url('/bg-lakehouse-2000.webp') no-repeat center;
+    // background: url('/bg-lakehouse-2000.webp') no-repeat center;
     background-size: cover;
   }
   .swap .swap_container {
@@ -545,7 +548,7 @@ body {
   }
   .setup_tip .ant-tooltip-inner .set_tip .set_tip_item .item_value .auto {
     background-color: rgb(66, 64, 64);
-    color: #fc72ff;
+    color: #11100e;
   }
   .setup_tip .ant-tooltip-inner .set_tip .set_tip_item .item_value .set_tip_input {
     background: transparent;
@@ -608,14 +611,15 @@ body {
 }
 .token_selection .show_token_no_data {
   padding: 0 12px;
-  background: #fc72ff;
+  background: #11100e;
   color: #fff;
   cursor: pointer;
   border-radius: 18px;
   border: none;
 }
 .token_selection .show_token_no_data:hover {
-  background: rgb(253, 60, 254);
+  // background: rgb(253, 60, 254);
+  background: #11100e;
 }
 .token_selection .show_token_no_data:focus, .token_selection .show_token_no_data:active {
   transform: scale(0.98);
