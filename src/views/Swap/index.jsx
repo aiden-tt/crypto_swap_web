@@ -307,7 +307,7 @@ const Swap = (props) => {
     <div className="swap">
       {contextHolder}
       <div className="w-full max-w-[600px] mx-auto px-4 py-8 text-center">
-          <h2 className="font-bold text-[30px]">Swap $BONK anytime, anywhere! </h2>
+          <h2 className="font-bold text-[30px] text-[#ffffff]">Swap $BONK anytime, anywhere! </h2>
           {/* <p className="mt-10 text-[14px] text-[#676565]">
             Secure and hassle-free fiat-to-crypto conversion is now available for $OSAKarb on Arbitrum L2. Easily
             purchase with your preferred payment method and enjoy fast transactions with low fees.
