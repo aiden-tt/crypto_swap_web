@@ -53,16 +53,16 @@ const Swap = (props) => {
     //   price: 1.23,
     //   currency:"EUR"
     // },
-    {
-      id: 2,
-      contract: "0x222",
-      chains: "tttt",
-      name: "ssss",
-      symbol: "T",
-      image: "https://s2.coinmarketcap.com/static/img/coins/64x64/74.png",
-      price: 1.13,
-      currency: "USD",
-    },
+    // {
+    //   id: 2,
+    //   contract: "0x222",
+    //   chains: "tttt",
+    //   name: "ssss",
+    //   symbol: "T",
+    //   image: "https://s2.coinmarketcap.com/static/img/coins/64x64/74.png",
+    //   price: 1.13,
+    //   currency: "USD",
+    // },
   ]);
 
   // 售卖选中的币种
