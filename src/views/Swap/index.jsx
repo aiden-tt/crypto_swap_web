@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { ArrowDownOutlined } from "@ant-design/icons";
 import { Modal, message } from "antd";
 import TokenSelection from "./components/TokenSelection";
-
 import closureAsh from "@/assets/swap/closureAsh.svg";
+import Decimal from 'decimal.js';
 
 // import "./swap.css";
 
@@ -53,16 +53,16 @@ const Swap = (props) => {
     //   price: 1.23,
     //   currency:"EUR"
     // },
-    // {
-    //   id: 2,
-    //   contract: "0x222",
-    //   chains: "tttt",
-    //   name: "ssss",
-    //   symbol: "T",
-    //   image: "https://s2.coinmarketcap.com/static/img/coins/64x64/74.png",
-    //   price: 1.13,
-    //   currency:"USD"
-    // },
+    {
+      id: 2,
+      contract: "0x222",
+      chains: "tttt",
+      name: "ssss",
+      symbol: "T",
+      image: "https://s2.coinmarketcap.com/static/img/coins/64x64/74.png",
+      price: 1.13,
+      currency: "USD",
+    },
   ]);
 
   // 售卖选中的币种
@@ -89,17 +89,31 @@ const Swap = (props) => {
     setBuyPrice(value * 5);
   };
 
+  const calculateAmount = (value, price) => {
+    try {
+      const amount = new Decimal(value).dividedBy(new Decimal(price)).toDecimalPlaces(2);
+      return amount.toNumber();
+    } catch (error) {
+      console.error('err:', error);
+      return 0;
+    }
+  };
+
   const sellChange = ({ target: { value } }) => {
     setSellAmount(value);
     if (buyToken?.price) {
-      setBuyAmount(Math.floor((value / buyToken.price) * 100) / 100);
+      const result = calculateAmount(value, buyToken.price);
+      setBuyAmount(result);
+      // setBuyAmount(Math.floor((value / buyToken.price) * 100) / 100);
     }
   };
 
   useEffect(() => {
     console.log(buyToken?.price);
     if (buyToken?.price && sellAmount) {
-      setBuyAmount(Math.floor((sellAmount / buyToken.price) * 100) / 100);
+      const result = calculateAmount(sellAmount, buyToken.price);
+      setBuyAmount(result);
+      // setBuyAmount(Math.floor((sellAmount / buyToken.price) * 100) / 100);
     }
   }, [buyToken]);
 
@@ -307,18 +321,17 @@ const Swap = (props) => {
     <div className="swap">
       {contextHolder}
       <div className="w-full max-w-[600px] mx-auto px-4 py-8 text-center">
-          <h2 className="font-bold text-[30px]">Buy $OSAKarb with Card Instantly on Arbitrum L2!</h2>
-          <p className="mt-10 text-[14px] text-[#676565]">
-            Secure and hassle-free fiat-to-crypto conversion is now available for $OSAKarb on Arbitrum L2. Easily
-            purchase with your preferred payment method and enjoy fast transactions with low fees.
-          </p>
-          <p className="mt-10 mb-10 text-[#676565]">Why choose us?</p>
-          <p className="mt-4 text-[#676565]">✔ Instant transactions</p>
-          <p className="mt-4 text-[#676565]">✔ Secure payment processing</p>
-          <p className="mt-4 text-[#676565]">✔ Competitive exchange rates</p> 
-        </div>
+        <h2 className="font-bold text-[30px]">Buy $OSAKarb with Card Instantly on Arbitrum L2!</h2>
+        <p className="mt-10 text-[14px] text-[#676565]">
+          Secure and hassle-free fiat-to-crypto conversion is now available for $OSAKarb on Arbitrum L2. Easily purchase
+          with your preferred payment method and enjoy fast transactions with low fees.
+        </p>
+        <p className="mt-10 mb-10 text-[#676565]">Why choose us?</p>
+        <p className="mt-4 text-[#676565]">✔ Instant transactions</p>
+        <p className="mt-4 text-[#676565]">✔ Secure payment processing</p>
+        <p className="mt-4 text-[#676565]">✔ Competitive exchange rates</p>
+      </div>
       <div className="swap_container">
-        
         {/* <div className="swap_setup">
           <Tooltip
             title={setTip}
@@ -343,8 +356,12 @@ const Swap = (props) => {
             </div>
             <div className="value_curr">
               <div className="flex align_center justify_center">
-                { buyToken?.currency === 'USD' && <img src='/images/common/usd.svg' alt="" className="w-[32px] h-[32px]" /> }
-                { buyToken?.currency === 'EUR' && <img src='/images/common/eur.svg' alt="" className="w-[32px] h-[32px]" /> }
+                {buyToken?.currency === "USD" && (
+                  <img src="/images/common/usd.svg" alt="" className="w-[32px] h-[32px]" />
+                )}
+                {buyToken?.currency === "EUR" && (
+                  <img src="/images/common/eur.svg" alt="" className="w-[32px] h-[32px]" />
+                )}
                 <div className="ml-6 text-[20px] h-[32px] leading-[32px]">{buyToken?.currency}</div>
               </div>
               {/* <TokenSelection
