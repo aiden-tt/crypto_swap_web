@@ -4,6 +4,7 @@ import { Modal, message } from "antd";
 import TokenSelection from "./components/TokenSelection";
 
 import closureAsh from "@/assets/swap/closureAsh.svg";
+import Decimal from 'decimal.js';
 
 // import "./swap.css";
 
@@ -60,7 +61,7 @@ const Swap = (props) => {
     //   name: "ssss",
     //   symbol: "T",
     //   image: "https://s2.coinmarketcap.com/static/img/coins/64x64/74.png",
-    //   price: 1.13,
+    //   price: 0.01,
     //   currency:"USD"
     // },
   ]);
@@ -89,17 +90,32 @@ const Swap = (props) => {
     setBuyPrice(value * 5);
   };
 
+  const calculateAmount = (value, price) => {
+    try {
+      const amount = new Decimal(value).dividedBy(new Decimal(price)).toDecimalPlaces(2);
+      return amount.toNumber();
+    } catch (error) {
+      console.error('err:', error);
+      return 0;
+    }
+  };
+
+
   const sellChange = ({ target: { value } }) => {
     setSellAmount(value);
     if (buyToken?.price) {
-      setBuyAmount(Math.floor((value / buyToken.price) * 100) / 100);
+      // setBuyAmount(Math.floor((value / buyToken.price) * 100) / 100);
+      const result = calculateAmount(value, buyToken.price);
+      setBuyAmount(result);
     }
   };
 
   useEffect(() => {
     console.log(buyToken?.price);
     if (buyToken?.price && sellAmount) {
-      setBuyAmount(Math.floor((sellAmount / buyToken.price) * 100) / 100);
+      // setBuyAmount(Math.floor((sellAmount / buyToken.price) * 100) / 100);
+      const result = calculateAmount(sellAmount, buyToken.price);
+      setBuyAmount(result);
     }
   }, [buyToken]);
 
