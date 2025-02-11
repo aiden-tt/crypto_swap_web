@@ -60,7 +60,7 @@ const TokenSelection = ({ tokenList, acToken, setAcToken, selectedToken }) => {
       >
         {!isActoken ? (
           <span className="selected_token">
-            <img src={acToken.image} alt="" />
+            {/* <img src={acToken.image} alt="" /> */}
             <span>{acToken.name}</span>
           </span>
         ) : (

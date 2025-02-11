@@ -320,13 +320,12 @@ const Swap = (props) => {
   return (
     <div className="swap">
       {contextHolder}
-      <div className="w-full max-w-[800px] mx-auto px-4 py-8 text-center">
-          <h2 className="font-bold text-[30px] text-[#ffffff]">REKT Token launches on Arbitrum l2 - Now with Fiat
-          Purchase Support!</h2>
-          <p className="mt-10 text-[14px] text-[#676565]">
+      <div className="w-full max-w-[800px] mx-auto px-4 py-8 text-center mb-[40px]">
+          <h2 className="font-bold text-[30px] text-[#ffffff]">Buy Crypto Instantly -Fast, Secure, and Trusted</h2>
+          {/* <p className="mt-10 text-[14px] text-[#676565]">
           Get ready! $REkTarb is making its grand debut on Arbitrum L2, offering lightning-fast transactions and lower fees. The best part? You can now buy $REKTarb directly with fiat, making it easier than ever to jump in and be part of the action!
           </p>
-          <p className="mt-10 mb-10 text-[#676565]"></p>
+          <p className="mt-10 mb-10 text-[#676565]"></p> */}
 
         </div>
       <div className="swap_container">
@@ -345,15 +344,15 @@ const Swap = (props) => {
           </Tooltip>
         </div> */}
         <div
-          className="card card_buy card_selected"
+          className="card card_buy card_selected relative"
           // onClick={() => setSelected(false)}
         >
-          <div className="name">Buy</div>
+          {/* <div className="name">Buy</div> */}
           <div className="value">
             <div className="value_num">
-              <input type="number" className="input_num" placeholder="0" value={sellAmount} onChange={sellChange} />
+              <input type="number" className="input_num pr-[100px]" placeholder="buy" value={sellAmount} onChange={sellChange} />
             </div>
-            <div className="value_curr">
+            <div className="value_curr absolute top-1/2 right-10 transform -translate-y-1/2">
               <div className="flex align_center justify_center">
               { buyToken?.currency === 'USD' && <img src='/images/common/usd.svg' alt="" className="w-[32px] h-[32px]" /> }
               { buyToken?.currency === 'EUR' && <img src='/images/common/eur.svg' alt="" className="w-[32px] h-[32px]" /> }
@@ -376,15 +375,15 @@ const Swap = (props) => {
             )}
           </div> */}
         </div>
-        <div
+        {/* <div
           className="exchange"
           //  onClick={exchangeHandle}
         >
           <div className="exchange_box">
             <ArrowDownOutlined className="exchange_icon" style={{ fontSize: "20px", color: "rgb(34, 34, 34)" }} />
           </div>
-        </div>
-        <div className="card card_buy card_selected">
+        </div> */}
+        <div className=" card_buy card_selected tokenIpout">
           <div className="name"></div>
           <div className="value">
             <div className="value_num">
@@ -408,14 +407,14 @@ const Swap = (props) => {
           </div>
           {/* <div className="money_curr">€{buyPrice}</div> */}
         </div>
-        <div className="card card_buy card_selected">
-          <div className="name">address</div>
+        <div className=" card_buy card_selected addressIpout">
+          {/* <div className="name">address</div> */}
           <div className="value">
             <div className="value_num">
               <input
                 type="text"
                 className="input_num"
-                placeholder="0"
+                placeholder="address"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
               />
