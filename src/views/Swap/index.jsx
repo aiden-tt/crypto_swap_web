@@ -2,13 +2,16 @@ import React, { useState, useEffect } from "react";
 import { ArrowDownOutlined } from "@ant-design/icons";
 import { Modal, message } from "antd";
 import TokenSelection from "./components/TokenSelection";
-import Decimal from 'decimal.js';
+import Decimal from "decimal.js";
 import closureAsh from "@/assets/swap/closureAsh.svg";
+import YourApp from "@/components/RaunbowButton";
+import { useAccount } from "wagmi";
 
 // import "./swap.css";
 
 const Swap = (props) => {
   const [messageApi, contextHolder] = message.useMessage();
+  const { isConnected, address:wagmiAddress } = useAccount();
   // 选中的框，false表示出售，true表示购买
   const [selected, setSelected] = useState(false);
   // 显示或隐藏更多信息
@@ -89,12 +92,13 @@ const Swap = (props) => {
     setBuyPrice(value * 5);
   };
 
+
   const calculateAmount = (value, price) => {
     try {
       const amount = new Decimal(value).dividedBy(new Decimal(price)).toDecimalPlaces(2);
       return amount.toNumber();
     } catch (error) {
-      console.error('err:', error);
+      console.error("err:", error);
       return 0;
     }
   };
@@ -273,6 +277,10 @@ const Swap = (props) => {
     fetchConfig();
   }, []);
 
+  useEffect(() => {
+    setAddress(wagmiAddress)
+  }, [wagmiAddress])
+
   // 设置提示
   const [setUpTip, setSetUpTip] = useState(false);
   const setTip = () => {
@@ -321,15 +329,13 @@ const Swap = (props) => {
     <div className="swap">
       {contextHolder}
       <div className="w-full max-w-[800px] mx-auto px-4 py-8 text-center mb-[40px]">
-          <h2 className="font-bold text-[30px] text-[#ffffff]">Buy Crypto Instantly -Fast, Secure, and Trusted</h2>
-          {/* <p className="mt-10 text-[14px] text-[#676565]">
+        <h2 className="font-bold text-[30px] text-[#ffffff]">Buy Crypto Instantly -Fast, Secure, and Trusted</h2>
+        {/* <p className="mt-10 text-[14px] text-[#676565]">
           Get ready! $REkTarb is making its grand debut on Arbitrum L2, offering lightning-fast transactions and lower fees. The best part? You can now buy $REKTarb directly with fiat, making it easier than ever to jump in and be part of the action!
           </p>
           <p className="mt-10 mb-10 text-[#676565]"></p> */}
-
-        </div>
+      </div>
       <div className="swap_container">
-        
         {/* <div className="swap_setup">
           <Tooltip
             title={setTip}
@@ -350,12 +356,22 @@ const Swap = (props) => {
           {/* <div className="name">Buy</div> */}
           <div className="value">
             <div className="value_num">
-              <input type="number" className="input_num pr-[100px]" placeholder="buy" value={sellAmount} onChange={sellChange} />
+              <input
+                type="number"
+                className="input_num pr-[100px]"
+                placeholder="buy"
+                value={sellAmount}
+                onChange={sellChange}
+              />
             </div>
             <div className="value_curr absolute top-1/2 right-10 transform -translate-y-1/2">
               <div className="flex align_center justify_center">
-              { buyToken?.currency === 'USD' && <img src='/images/common/usd.svg' alt="" className="w-[32px] h-[32px]" /> }
-              { buyToken?.currency === 'EUR' && <img src='/images/common/eur.svg' alt="" className="w-[32px] h-[32px]" /> }
+                {buyToken?.currency === "USD" && (
+                  <img src="/images/common/usd.svg" alt="" className="w-[32px] h-[32px]" />
+                )}
+                {buyToken?.currency === "EUR" && (
+                  <img src="/images/common/eur.svg" alt="" className="w-[32px] h-[32px]" />
+                )}
                 <div className="ml-6 text-[20px] h-[32px] leading-[32px]">{buyToken?.currency}</div>
               </div>
               {/* <TokenSelection
@@ -414,15 +430,20 @@ const Swap = (props) => {
               <input
                 type="text"
                 className="input_num"
-                placeholder="address"
+                placeholder="Bitcoin (AGENT) address"
                 value={address}
+                // defaultValue={isConnected ? wagmiAddress : ""}
                 onChange={(e) => setAddress(e.target.value)}
               />
             </div>
           </div>
           {/* <div className="money_curr">€{buyPrice}</div> */}
         </div>
-
+        <YourApp/>
+        <div className="mt-[30px] text-[14px] text-[#212529]">
+          <p>AGENT address must be <strong style={{fontWeight: 600}}>yours</strong> and <strong style={{fontWeight: 600}}>under your full control.</strong></p>
+        </div>
+       
         <div className="btn_container">
           {/* 未输入数字 */}
           {btnStatus === 1 && <div className="enter_amount">Enter an amount</div>}
@@ -439,6 +460,14 @@ const Swap = (props) => {
               Connect Wallet
             </div>
           )}
+        </div>
+        <div className="mt-[30px] text-center">
+          <p>
+            Need support? Contact{" "}
+            <a href="mailto:support@aiagentplatform.com" target="blank" rel="noopener">
+            support@aiagentplatform.com
+            </a>
+          </p>
         </div>
         {/* {btnStatus === 2 && (
           <div className={showMore ? "more_info more_info_show" : "more_info"}>
@@ -566,7 +595,7 @@ const Swap = (props) => {
             </div>
           </div>
         </div> */}
-
+        
         <div className="confim_btn" onClick={confirmExchange}>
           Swap
         </div>
