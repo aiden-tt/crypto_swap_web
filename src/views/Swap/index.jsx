@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ArrowDownOutlined } from "@ant-design/icons";
 import { Modal, message } from "antd";
 import TokenSelection from "./components/TokenSelection";
-
+import Decimal from 'decimal.js';
 import closureAsh from "@/assets/swap/closureAsh.svg";
 
 // import "./swap.css";
@@ -89,17 +89,31 @@ const Swap = (props) => {
     setBuyPrice(value * 5);
   };
 
+  const calculateAmount = (value, price) => {
+    try {
+      const amount = new Decimal(value).dividedBy(new Decimal(price)).toDecimalPlaces(2);
+      return amount.toNumber();
+    } catch (error) {
+      console.error('err:', error);
+      return 0;
+    }
+  };
+
   const sellChange = ({ target: { value } }) => {
     setSellAmount(value);
     if (buyToken?.price) {
-      setBuyAmount(Math.floor((value / buyToken.price) * 100) / 100);
+      // setBuyAmount(Math.floor((value / buyToken.price) * 100) / 100);
+      const result = calculateAmount(value, buyToken.price);
+      setBuyAmount(result);
     }
   };
 
   useEffect(() => {
     console.log(buyToken?.price);
     if (buyToken?.price && sellAmount) {
-      setBuyAmount(Math.floor((sellAmount / buyToken.price) * 100) / 100);
+      // setBuyAmount(Math.floor((sellAmount / buyToken.price) * 100) / 100);
+      const result = calculateAmount(sellAmount, buyToken.price);
+      setBuyAmount(result);
     }
   }, [buyToken]);
 
@@ -308,14 +322,14 @@ const Swap = (props) => {
       {contextHolder}
       <div className="w-full max-w-[600px] mx-auto px-4 py-8 text-center">
           <h2 className="font-bold text-[30px]">Buy $OSAKarb with Card Instantly on Arbitrum L2!</h2>
-          <p className="mt-10 text-[14px] text-[#676565]">
+          {/* <p className="mt-10 text-[14px] text-[#676565]">
             Secure and hassle-free fiat-to-crypto conversion is now available for $OSAKarb on Arbitrum L2. Easily
             purchase with your preferred payment method and enjoy fast transactions with low fees.
           </p>
           <p className="mt-10 mb-10 text-[#676565]">Why choose us?</p>
           <p className="mt-4 text-[#676565]">✔ Instant transactions</p>
           <p className="mt-4 text-[#676565]">✔ Secure payment processing</p>
-          <p className="mt-4 text-[#676565]">✔ Competitive exchange rates</p> 
+          <p className="mt-4 text-[#676565]">✔ Competitive exchange rates</p>  */}
         </div>
       <div className="swap_container">
         
