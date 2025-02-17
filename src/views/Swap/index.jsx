@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { ArrowDownOutlined } from "@ant-design/icons";
 import { Modal, message } from "antd";
 import TokenSelection from "./components/TokenSelection";
-import Decimal from 'decimal.js';
+import Decimal from "decimal.js";
 import closureAsh from "@/assets/swap/closureAsh.svg";
+import wnypay from "@/assets/swap/wnypay.svg";
+import arbitrum from "@/assets/swap/arbitrum.png";
 
 // import "./swap.css";
 
@@ -61,7 +63,7 @@ const Swap = (props) => {
     //   symbol: "T",
     //   image: "https://s2.coinmarketcap.com/static/img/coins/64x64/74.png",
     //   price: 1.13,
-    //   currency:"USD"
+    //   currency: "USD",
     // },
   ]);
 
@@ -94,7 +96,7 @@ const Swap = (props) => {
       const amount = new Decimal(value).dividedBy(new Decimal(price)).toDecimalPlaces(2);
       return amount.toNumber();
     } catch (error) {
-      console.error('err:', error);
+      console.error("err:", error);
       return 0;
     }
   };
@@ -321,16 +323,17 @@ const Swap = (props) => {
     <div className="swap">
       {contextHolder}
       <div className="w-full max-w-[800px] mx-auto px-4 py-8 text-center">
-          <h2 className="font-bold text-[30px] text-[#ffffff]">REKT Token launches on Arbitrum l2 - Now with Fiat
-          Purchase Support!</h2>
-          <p className="mt-10 text-[14px] text-[#676565]">
-          Get ready! $REkTarb is making its grand debut on Arbitrum L2, offering lightning-fast transactions and lower fees. The best part? You can now buy $REKTarb directly with fiat, making it easier than ever to jump in and be part of the action!
-          </p>
-          <p className="mt-10 mb-10 text-[#676565]"></p>
-
-        </div>
+        <h2 className="font-bold text-[30px] text-[#ffffff]">
+          REKT Token launches on Arbitrum l2 - Now with Fiat Purchase Support!
+        </h2>
+        <p className="mt-10 text-[14px] text-[#676565]">
+          Get ready! $REkTarb is making its grand debut on Arbitrum L2, offering lightning-fast transactions and lower
+          fees. The best part? You can now buy $REKTarb directly with fiat, making it easier than ever to jump in and be
+          part of the action!
+        </p>
+        <p className="mt-10 mb-10 text-[#676565]"></p>
+      </div>
       <div className="swap_container">
-        
         {/* <div className="swap_setup">
           <Tooltip
             title={setTip}
@@ -355,8 +358,12 @@ const Swap = (props) => {
             </div>
             <div className="value_curr">
               <div className="flex align_center justify_center">
-              { buyToken?.currency === 'USD' && <img src='/images/common/usd.svg' alt="" className="w-[32px] h-[32px]" /> }
-              { buyToken?.currency === 'EUR' && <img src='/images/common/eur.svg' alt="" className="w-[32px] h-[32px]" /> }
+                {buyToken?.currency === "USD" && (
+                  <img src="/images/common/usd.svg" alt="" className="w-[32px] h-[32px]" />
+                )}
+                {buyToken?.currency === "EUR" && (
+                  <img src="/images/common/eur.svg" alt="" className="w-[32px] h-[32px]" />
+                )}
                 <div className="ml-6 text-[20px] h-[32px] leading-[32px]">{buyToken?.currency}</div>
               </div>
               {/* <TokenSelection
@@ -520,7 +527,7 @@ const Swap = (props) => {
         className="confim_modal"
       >
         <div className="header">
-          <span>You’re swapping</span>
+          <span>Buy Crypto</span>
           <img src={closureAsh} alt="" onClick={handleCancelModal} />
         </div>
         <div className="token_item">
@@ -546,6 +553,16 @@ const Swap = (props) => {
             <img src={buyToken.image} alt="" />
           </div>
         </div>
+        <div className="w-full titewynpay">
+          <div className="flex w-full justify-center items-center">
+            <img src={wnypay} className="w-[30px] h-[30px] mr-5" alt="" />
+            <span className="text-[16px]">Wynpay Best quote</span>
+          </div>
+          <div className="flex w-full justify-center items-center">
+            <img src={arbitrum} className="w-[20px] h-[20px] rounded-full mr-5" alt="" />
+            <span>Arbitrum One</span>
+          </div>
+        </div>
         {/* <div className="confim_info">
           <div className="confim_info_item">
             <span>Fee (0.25%)</span>
@@ -569,7 +586,7 @@ const Swap = (props) => {
         </div> */}
 
         <div className="confim_btn" onClick={confirmExchange}>
-          Swap
+          CONTINUE
         </div>
       </Modal>
 

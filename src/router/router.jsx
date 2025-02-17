@@ -13,7 +13,7 @@ const router = createBrowserRouter([
   // },
 
   {
-    path: "/swap",
+    path: "/buy",
     element: <Swap />,
   },
   // {
