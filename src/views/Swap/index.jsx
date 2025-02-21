@@ -6,11 +6,14 @@ import Decimal from "decimal.js";
 import closureAsh from "@/assets/swap/closureAsh.svg";
 import wnypay from "@/assets/swap/wnypay.svg";
 import arbitrum from "@/assets/swap/arbitrum.png";
+import YourApp from "@/components/RaunbowButton";
+import { useAccount } from "wagmi";
 
 // import "./swap.css";
 
 const Swap = (props) => {
   const [messageApi, contextHolder] = message.useMessage();
+  const { isConnected, address: wagmiAddress } = useAccount();
   // 选中的框，false表示出售，true表示购买
   const [selected, setSelected] = useState(false);
   // 显示或隐藏更多信息
@@ -275,6 +278,10 @@ const Swap = (props) => {
     fetchConfig();
   }, []);
 
+  useEffect(() => {
+    setAddress(wagmiAddress);
+  }, [wagmiAddress]);
+
   // 设置提示
   const [setUpTip, setSetUpTip] = useState(false);
   const setTip = () => {
@@ -429,6 +436,10 @@ const Swap = (props) => {
             </div>
           </div>
           {/* <div className="money_curr">€{buyPrice}</div> */}
+        </div>
+
+        <div className="mt-10 mb-10">
+          <YourApp />
         </div>
 
         <div className="btn_container">
