@@ -273,6 +273,51 @@ const Swap = (props) => {
     fetchConfig();
   }, []);
 
+
+  useEffect(() => {
+    const iframe = document.querySelector("iframe");
+    if (iframe) {
+      console.error("Buy Page Message look at succ");
+      window.addEventListener("message", function (event) {
+        const { data } = event;
+        console.log(
+          "Buy Page Message received from the child: " + JSON.stringify(data)
+        );
+        const { type } = data;
+        if (type === "page_loaded") {
+          console.log("page fully loaded");
+        } else if (type === "logged_in_success") {
+          // iframe.style.display = "block";
+          console.log("token:", data.token);
+        } else if (type === "order_3ds_status") {
+          if (data.is3DS) console.log("3DS checking is triggered");
+          else console.log("3DS checking is not triggered");
+        } else if (type === "kyc_required") {
+          // iframe.style.display = "block";
+        } else if (type === "logged_in_failure") {
+          // alert(JSON.stringify(data.errorCode));
+          messageApi.open({
+            type: "error",
+            content: JSON.stringify(data.errorCode),
+          });
+        } else if (type === "order_cancelled") {
+          // setShowWnyPay(false);
+          setOrderModal(false);
+          // iframe.style.display = "none";
+        } else if (type === "order_completed") {
+          // iframe.src = `${process.env.NEXT_PUBLIC_PAY_URL}`;
+          // iframe.style.display = "none";
+          // setShowWnyPay(false);
+          setTimeout( () => {
+            setOrderModal(false);
+          }, 1000);
+        } else {
+        }
+      });
+    }
+  }, [window, orderModal]);
+
+
   // 设置提示
   const [setUpTip, setSetUpTip] = useState(false);
   const setTip = () => {
