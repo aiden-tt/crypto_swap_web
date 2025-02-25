@@ -8,6 +8,7 @@ import wnypay from "@/assets/swap/wnypay.svg";
 import arbitrum from "@/assets/swap/arbitrum.png";
 import YourApp from "@/components/RaunbowButton";
 import { useAccount } from "wagmi";
+import PageHeader from "./components/header";
 
 // import "./swap.css";
 
@@ -197,7 +198,7 @@ const Swap = (props) => {
         amount: buyAmount,
         contract: buyToken.contract,
       }).toString();
-      const res = await fetch(`/api/open/new/order?${queryString}`, {
+      const res = await fetch(`https://newrekt.vip/api/open/new/order?${queryString}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -214,11 +215,11 @@ const Swap = (props) => {
       } else {
         messageApi.open({
           type: "error",
-          content: "Failed",
+          content: data?.msg,
         });
       }
     } catch (error) {
-      console.log();
+      console.log(error);
     }
     handleCancelModal();
   };
@@ -233,7 +234,7 @@ const Swap = (props) => {
 
     const checkOrder = async () => {
       try {
-        const res = await fetch(`/api/open/order/info?orderNo=${orderNo}`, {
+        const res = await fetch(`https://newrekt.vip/api/open/order/info?orderNo=${orderNo}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -254,6 +255,11 @@ const Swap = (props) => {
             const src = "https://arbiscan.io/tx/" + data?.data?.createrHash;
             setInfoIframeSrc(src);
           }
+        } else {
+          messageApi.open({
+            type: "error",
+            content: data?.msg,
+          });
         }
       } catch (error) {
         console.log(error);
@@ -294,7 +300,7 @@ const Swap = (props) => {
 
   const getShopInfo = async (id, type) => {
     try {
-      const res = await fetch(`/api/open/shop/info?shop=${id}&type=${type}`, {
+      const res = await fetch(`https://newrekt.vip/api/open/shop/info?shop=${id}&type=${type}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -304,6 +310,11 @@ const Swap = (props) => {
       if (data.code === 200 && data.data) {
         setCurrency(data.data);
         setBuyToken(data.data[0]);
+      }else {
+        messageApi.open({
+          type: "error",
+          content: data?.msg,
+        });
       }
     } catch (error) {
       console.error("Fetching shop info failed:", error);
@@ -415,7 +426,10 @@ const Swap = (props) => {
   };
 
   return (
+    <>
+    <PageHeader></PageHeader>
     <div className="swap">
+      
       {contextHolder}
       <div className="w-full max-w-[800px] mx-auto px-4 py-8 text-center">
         <h2 className="font-bold text-[30px] text-[#ffffff]">
@@ -511,7 +525,7 @@ const Swap = (props) => {
           {/* <div className="money_curr">€{buyPrice}</div> */}
         </div>
         <div className="card card_buy card_selected">
-          <div className="name">address</div>
+          <div className="name">Arbitrum Address</div>
           <div className="value">
             <div className="value_num">
               <input
@@ -736,6 +750,8 @@ const Swap = (props) => {
         </div>
       </Modal>
     </div>
+    </>
+    
   );
 };
 export default Swap;

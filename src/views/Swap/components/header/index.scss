@@ -1,0 +1,28 @@
+.headerContent {
+  .pcSty {
+    display: block;
+  }
+  .contlist {
+    transition: all 0.3s ease-in-out;
+
+    &.invisible {
+      pointer-events: none;
+    }
+  }
+  .mobsty {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .headerContent {
+    .pcSty {
+      display: none;
+    }
+    .mobsty {
+      display: block;
+    }
+  }
+}
+
+
