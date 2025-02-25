@@ -193,6 +193,9 @@ const Swap = (props) => {
   // 确认弹窗
   const [confirmModal, setConfirmModal] = useState(false);
   const [orderModal, setOrderModal] = useState(false);
+  const [orderNo, setOrderNo] = useState("");
+  const [infoModal, setInfoModal] = useState(false);
+  const [infoIframeSrc, setInfoIframeSrc] = useState("");
 
   const handleCancelModal = () => {
     setConfirmModal(false);
@@ -216,7 +219,12 @@ const Swap = (props) => {
       const data = await res.json();
       if (data.code === 200) {
         setOrderModal(true);
-        setIframeSrc(data?.data);
+        // setIframeSrc(data?.data);
+        setIframeSrc(data?.data?.url);
+        setOrderNo(data?.data?.orderNo);
+        if (data?.data?.orderNo) {
+          getOrderInfo(data?.data?.orderNo);
+        }
       } else {
         messageApi.open({
           type: "error",
@@ -228,6 +236,59 @@ const Swap = (props) => {
     }
     handleCancelModal();
   };
+
+   //  获取订单信息
+   const getOrderInfo = async (orderNo) => {
+    // 清除之前的定时器
+    if (window.orderTimer) {
+      clearInterval(window.orderTimer);
+    }
+
+    const checkOrder = async () => {
+      try {
+        const res = await fetch(`/apo/open/order/info?orderNo=${orderNo}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+        if (data.code === 200) {
+          console.log("订单信息=>", data?.data);
+
+          // 如果订单状态为完成或失败,清除定时器
+          if (data?.data?.orderFinish) {
+            console.log(!data?.data?.orderFinish);
+            clearInterval(window.orderTimer);
+            // 关闭下单对话框
+            setOrderModal(false);
+            // 展示info 订单弹窗
+            setInfoModal(true);
+            const src = "https://arbiscan.io/tx/" + data?.data?.createrHash;
+            setInfoIframeSrc(src);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+        clearInterval(window.orderTimer);
+      }
+    };
+
+    // 立即执行一次
+    await checkOrder();
+
+    // 每10秒轮询一次
+    window.orderTimer = setInterval(checkOrder, 5000);
+  };
+
+  // 在组件卸载时清除定时器
+  useEffect(() => {
+    return () => {
+      if (window.orderTimer) {
+        clearInterval(window.orderTimer);
+      }
+    };
+  }, []);
 
   // 兑换提示
   const exchangeTip = () => {
@@ -310,6 +371,7 @@ const Swap = (props) => {
           // setShowWnyPay(false);
           setTimeout( () => {
             setOrderModal(false);
+            setInfoModal(true);
           }, 1000);
         } else {
         }
