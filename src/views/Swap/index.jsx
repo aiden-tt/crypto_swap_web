@@ -233,7 +233,7 @@ const Swap = (props) => {
 
     const checkOrder = async () => {
       try {
-        const res = await fetch(`/open/order/info?orderNo=${orderNo}`, {
+        const res = await fetch(`/api/open/order/info?orderNo=${orderNo}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
