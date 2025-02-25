@@ -198,7 +198,7 @@ const Swap = (props) => {
         amount: buyAmount,
         contract: buyToken.contract,
       }).toString();
-      const res = await fetch(`https://newrekt.vip/api/open/new/order?${queryString}`, {
+      const res = await fetch(`/api/open/new/order?${queryString}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -234,7 +234,7 @@ const Swap = (props) => {
 
     const checkOrder = async () => {
       try {
-        const res = await fetch(`https://newrekt.vip/api/open/order/info?orderNo=${orderNo}`, {
+        const res = await fetch(`/api/open/order/info?orderNo=${orderNo}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -300,7 +300,7 @@ const Swap = (props) => {
 
   const getShopInfo = async (id, type) => {
     try {
-      const res = await fetch(`https://newrekt.vip/api/open/shop/info?shop=${id}&type=${type}`, {
+      const res = await fetch(`/api/open/shop/info?shop=${id}&type=${type}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
