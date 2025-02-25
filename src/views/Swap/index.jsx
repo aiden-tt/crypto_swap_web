@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ArrowDownOutlined } from "@ant-design/icons";
-import { Modal, message } from "antd";
+import { Modal, message, Spin } from "antd";
 import TokenSelection from "./components/TokenSelection";
 import closureAsh from "@/assets/swap/closureAsh.svg";
 import Decimal from 'decimal.js';
@@ -192,6 +192,9 @@ const Swap = (props) => {
   // 确认弹窗
   const [confirmModal, setConfirmModal] = useState(false);
   const [orderModal, setOrderModal] = useState(false);
+  const [orderNo, setOrderNo] = useState("");
+  const [infoModal, setInfoModal] = useState(false);
+  const [infoIframeSrc, setInfoIframeSrc] = useState("");
 
   const handleCancelModal = () => {
     setConfirmModal(false);
@@ -215,7 +218,12 @@ const Swap = (props) => {
       const data = await res.json();
       if (data.code === 200) {
         setOrderModal(true);
-        setIframeSrc(data?.data);
+        // setIframeSrc(data?.data);
+        setIframeSrc(data?.data?.url);
+        setOrderNo(data?.data?.orderNo);
+        if (data?.data?.orderNo) {
+          getOrderInfo(data?.data?.orderNo);
+        }
       } else {
         messageApi.open({
           type: "error",
@@ -264,6 +272,7 @@ const Swap = (props) => {
           // setShowWnyPay(false);
           setTimeout( () => {
             setOrderModal(false);
+            setInfoModal(true);
           }, 1000);
         } else {
         }
@@ -271,6 +280,59 @@ const Swap = (props) => {
     }
   }, [window, orderModal]);
 
+
+   //  获取订单信息
+   const getOrderInfo = async (orderNo) => {
+    // 清除之前的定时器
+    if (window.orderTimer) {
+      clearInterval(window.orderTimer);
+    }
+
+    const checkOrder = async () => {
+      try {
+        const res = await fetch(`/open/order/info?orderNo=${orderNo}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+        if (data.code === 200) {
+          console.log("订单信息=>", data?.data);
+
+          // 如果订单状态为完成或失败,清除定时器
+          if (data?.data?.orderFinish) {
+            console.log(!data?.data?.orderFinish);
+            clearInterval(window.orderTimer);
+            // 关闭下单对话框
+            setOrderModal(false);
+            // 展示info 订单弹窗
+            setInfoModal(true);
+            const src = "https://arbiscan.io/tx/" + data?.data?.createrHash;
+            setInfoIframeSrc(src);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+        clearInterval(window.orderTimer);
+      }
+    };
+
+    // 立即执行一次
+    await checkOrder();
+
+    // 每10秒轮询一次
+    window.orderTimer = setInterval(checkOrder, 5000);
+  };
+
+  // 在组件卸载时清除定时器
+  useEffect(() => {
+    return () => {
+      if (window.orderTimer) {
+        clearInterval(window.orderTimer);
+      }
+    };
+  }, []);
 
 
   // 兑换提示
@@ -624,6 +686,7 @@ const Swap = (props) => {
         open={orderModal}
         onCancel={() => {
           setOrderModal(false);
+          setIframeSrc("")
         }}
         centered={true}
         closable={true}
@@ -633,6 +696,35 @@ const Swap = (props) => {
       >
         <div className="mt-[25px] h-[80vh]">
           <iframe width="100%" height="100%" src={iframeSrc} frameborder="0"></iframe>
+        </div>
+      </Modal>
+
+       {/* 订单信息 */}
+       <Modal
+        open={infoModal}
+        onCancel={() => {
+          setInfoModal(false);
+          setInfoIframeSrc("");
+        }}
+        title="Order information"
+        centered={true}
+        closable={true}
+        footer={null}
+        maskClosable={false}
+        className="order_model"
+      >
+        <div className="mt-[25px] h-[20vh] cursor-pointer flex justify-center items-center">
+          {infoIframeSrc ? <div className="w-full">
+            <div className="w-full text-[#28a0f0] break-words pt-[10px] pb-[20px]" onClick={() => {
+            window.open(infoIframeSrc)
+           }}>{infoIframeSrc}</div>
+          <div className="w-[80px] rounded-md pt-4 pb-4 bg-[#28a0f0] text-[#fff] text-center m-auto"
+           onClick={() => {
+            window.open(infoIframeSrc)
+           }}
+          >open</div>
+          </div> : <Spin  />  }
+          
         </div>
       </Modal>
     </div>
