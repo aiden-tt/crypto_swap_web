@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ArrowDownOutlined } from "@ant-design/icons";
-import { Modal, message } from "antd";
+import { Modal, message, Spin } from "antd";
 import TokenSelection from "./components/TokenSelection";
 import closureAsh from "@/assets/swap/closureAsh.svg";
 import Decimal from 'decimal.js';
@@ -246,7 +246,7 @@ const Swap = (props) => {
 
     const checkOrder = async () => {
       try {
-        const res = await fetch(`/apo/open/order/info?orderNo=${orderNo}`, {
+        const res = await fetch(`/api/open/order/info?orderNo=${orderNo}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -690,6 +690,7 @@ const Swap = (props) => {
         open={orderModal}
         onCancel={() => {
           setOrderModal(false);
+          setIframeSrc("")
         }}
         centered={true}
         closable={true}
@@ -699,6 +700,35 @@ const Swap = (props) => {
       >
         <div className="mt-[25px] h-[80vh]">
           <iframe width="100%" height="100%" src={iframeSrc} frameborder="0"></iframe>
+        </div>
+      </Modal>
+
+       {/* 订单信息 */}
+       <Modal
+        open={infoModal}
+        onCancel={() => {
+          setInfoModal(false);
+          setInfoIframeSrc("");
+        }}
+        title="Order information"
+        centered={true}
+        closable={true}
+        footer={null}
+        maskClosable={false}
+        className="order_model"
+      >
+        <div className="mt-[25px] h-[20vh] cursor-pointer flex justify-center items-center">
+          {infoIframeSrc ? <div className="w-full">
+            <div className="w-full text-[#28a0f0] break-words pt-[10px] pb-[20px]" onClick={() => {
+            window.open(infoIframeSrc)
+           }}>{infoIframeSrc}</div>
+          <div className="w-[80px] rounded-md pt-4 pb-4 bg-[#28a0f0] text-[#fff] text-center m-auto"
+           onClick={() => {
+            window.open(infoIframeSrc)
+           }}
+          >open</div>
+          </div> : <Spin  />  }
+          
         </div>
       </Modal>
     </div>
