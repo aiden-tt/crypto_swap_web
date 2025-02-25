@@ -4,6 +4,7 @@ import { Modal, message, Spin } from "antd";
 import TokenSelection from "./components/TokenSelection";
 import closureAsh from "@/assets/swap/closureAsh.svg";
 import Decimal from 'decimal.js';
+import PageHeader from "./components/header/index";
 
 // import "./swap.css";
 
@@ -228,7 +229,7 @@ const Swap = (props) => {
       } else {
         messageApi.open({
           type: "error",
-          content: "Failed",
+          content: data?.msg,
         });
       }
     } catch (error) {
@@ -267,6 +268,12 @@ const Swap = (props) => {
             const src = "https://arbiscan.io/tx/" + data?.data?.createrHash;
             setInfoIframeSrc(src);
           }
+        }else {
+          messageApi.open({
+            type: "error",
+            content: data?.msg,
+          });
+          setInfoModal(false);
         }
       } catch (error) {
         console.log(error);
@@ -317,6 +324,11 @@ const Swap = (props) => {
       if (data.code === 200 && data.data) {
         setCurrency(data.data);
         setBuyToken(data.data[0]);
+      }else {
+        messageApi.open({
+          type: "error",
+          content: data?.msg,
+        });
       }
     } catch (error) {
       console.error("Fetching shop info failed:", error);
@@ -425,6 +437,8 @@ const Swap = (props) => {
     );
   };
   return (
+    <>
+    <PageHeader></PageHeader>
     <div className="swap">
       {contextHolder}
       <div className="w-full max-w-[600px] mx-auto px-4 py-8 text-center">
@@ -521,7 +535,7 @@ const Swap = (props) => {
           {/* <div className="money_curr">€{buyPrice}</div> */}
         </div>
         <div className="card card_buy card_selected">
-          <div className="name">address</div>
+          <div className="name">Arbitrum Address</div>
           <div className="value">
             <div className="value_num">
               <input
@@ -732,6 +746,8 @@ const Swap = (props) => {
         </div>
       </Modal>
     </div>
+    </>
+    
   );
 };
 export default Swap;

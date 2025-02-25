@@ -9,6 +9,25 @@ body {
   height: 100%;
 }
 
+.pcSty {
+  display: block;
+}
+.mobSty {
+  display: none;
+}
+
+@media screen and (max-width: 768px){
+  .pcSty {
+    display: none;
+  }
+  .mobSty {
+    display: block;
+  }
+}
+
+
+
+
 .swap {
   width: 100%;
   height: 100%;
