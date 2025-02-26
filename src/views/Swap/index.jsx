@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { ArrowDownOutlined } from "@ant-design/icons";
-import { Modal, message, Spin } from "antd";
+import { Modal, message } from "antd";
 import TokenSelection from "./components/TokenSelection";
 import closureAsh from "@/assets/swap/closureAsh.svg";
 import Decimal from 'decimal.js';
 import PageHeader from "./components/header/index";
+import IframeModals from "./components/IframeModals";
+
 
 // import "./swap.css";
 
@@ -137,16 +139,6 @@ const Swap = (props) => {
     slippage: 1,
   });
 
-  // 请求token列表
-  const requestTokenList = async () => {
-    const res = await (
-      await fetch("http://0xtest2024apps001olunoshibdegenbitethusdtc0xogs891.wedegen.com/v2api/x20/swapTokenList")
-    ).json();
-    console.log("请求token列表", res);
-    if (res.code === 200 && res.data) {
-      setCurrency(res.data);
-    }
-  };
   // 确认按钮可以兑换
   const reviewClick = async () => {
     if (!sellAmount)
@@ -167,17 +159,6 @@ const Swap = (props) => {
     setBtnStatus(1);
   };
 
-  // 交换按钮
-  const exchangeHandle = () => {
-    const obj = JSON.parse(JSON.stringify(sellToken));
-    setSellToken(buyToken);
-    setBuyToken(obj);
-    const num = sellAmount;
-    setSellAmount(buyAmount);
-    setSellPrice(buyAmount * 5);
-    setBuyAmount(num);
-    setBuyPrice(num * 10);
-  };
 
   // Max slippage内容
   const [maxSlippage, setMaxSlippage] = useState("");
@@ -223,9 +204,6 @@ const Swap = (props) => {
         // setIframeSrc(data?.data);
         setIframeSrc(data?.data?.url);
         setOrderNo(data?.data?.orderNo);
-        if (data?.data?.orderNo) {
-          getOrderInfo(data?.data?.orderNo);
-        }
       } else {
         messageApi.open({
           type: "error",
@@ -238,79 +216,6 @@ const Swap = (props) => {
     handleCancelModal();
   };
 
-   //  获取订单信息
-   const getOrderInfo = async (orderNo) => {
-    // 清除之前的定时器
-    if (window.orderTimer) {
-      clearInterval(window.orderTimer);
-    }
-
-    const checkOrder = async () => {
-      try {
-        const res = await fetch(`/api/open/order/info?orderNo=${orderNo}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await res.json();
-        if (data.code === 200) {
-          console.log("订单信息=>", data?.data);
-
-          // 如果订单状态为完成或失败,清除定时器
-          if (data?.data?.orderFinish) {
-            console.log(!data?.data?.orderFinish);
-            clearInterval(window.orderTimer);
-            // 关闭下单对话框
-            setOrderModal(false);
-            // 展示info 订单弹窗
-            setInfoModal(true);
-            const src = "https://arbiscan.io/tx/" + data?.data?.createrHash;
-            setInfoIframeSrc(src);
-          }
-        }else {
-          messageApi.open({
-            type: "error",
-            content: data?.msg,
-          });
-          setInfoModal(false);
-        }
-      } catch (error) {
-        console.log(error);
-        clearInterval(window.orderTimer);
-      }
-    };
-
-    // 立即执行一次
-    await checkOrder();
-
-    // 每10秒轮询一次
-    window.orderTimer = setInterval(checkOrder, 5000);
-  };
-
-  // 在组件卸载时清除定时器
-  useEffect(() => {
-    return () => {
-      if (window.orderTimer) {
-        clearInterval(window.orderTimer);
-      }
-    };
-  }, []);
-
-  // 兑换提示
-  const exchangeTip = () => {
-    return (
-      <div className="swap_tip">
-        <p>
-          This is the cost to process your transaction on the blockchain. Uniswap does not receive any share of these
-          fees.
-        </p>
-        <a href="https://support.uniswap.org/hc/en-us/articles/8370337377805-What-is-a-network-cost" target="_blank">
-          Learn more
-        </a>
-      </div>
-    );
-  };
 
   const getShopInfo = async (id, type) => {
     try {
@@ -347,95 +252,9 @@ const Swap = (props) => {
   }, []);
 
 
-  useEffect(() => {
-    const iframe = document.querySelector("iframe");
-    if (iframe) {
-      console.error("Buy Page Message look at succ");
-      window.addEventListener("message", function (event) {
-        const { data } = event;
-        console.log(
-          "Buy Page Message received from the child: " + JSON.stringify(data)
-        );
-        const { type } = data;
-        if (type === "page_loaded") {
-          console.log("page fully loaded");
-        } else if (type === "logged_in_success") {
-          // iframe.style.display = "block";
-          console.log("token:", data.token);
-        } else if (type === "order_3ds_status") {
-          if (data.is3DS) console.log("3DS checking is triggered");
-          else console.log("3DS checking is not triggered");
-        } else if (type === "kyc_required") {
-          // iframe.style.display = "block";
-        } else if (type === "logged_in_failure") {
-          // alert(JSON.stringify(data.errorCode));
-          messageApi.open({
-            type: "error",
-            content: JSON.stringify(data.errorCode),
-          });
-        } else if (type === "order_cancelled") {
-          // setShowWnyPay(false);
-          setOrderModal(false);
-          // iframe.style.display = "none";
-        } else if (type === "order_completed") {
-          // iframe.src = `${process.env.NEXT_PUBLIC_PAY_URL}`;
-          // iframe.style.display = "none";
-          // setShowWnyPay(false);
-          setTimeout( () => {
-            setOrderModal(false);
-            setInfoModal(true);
-          }, 1000);
-        } else {
-        }
-      });
-    }
-  }, [window, orderModal]);
 
 
-  // 设置提示
-  const [setUpTip, setSetUpTip] = useState(false);
-  const setTip = () => {
-    return (
-      <div className="set_tip">
-        <div className="set_tip_title">Swap settings</div>
-        <div className="set_tip_item">
-          <span className="item_name">Max slippage</span>
-          <div className="item_value">
-            <div className="auto">Auto</div>
-            <input
-              type="number"
-              placeholder="1.00"
-              min={1}
-              max={10}
-              value={maxSlippage}
-              onChange={maxSlippageChange}
-              className="set_tip_input slippage_input"
-            />
-            <div>%</div>
-          </div>
-        </div>
-        <div className="set_tip_item">
-          <label for="time" className="item_name">
-            Transaction deadline
-          </label>
-          <div className="item_value">
-            <input
-              id="time"
-              type="number"
-              placeholder="30"
-              value={time}
-              onChange={timeChange}
-              className="set_tip_input time_input"
-            />
-            <div>minutes</div>
-          </div>
-        </div>
-        <div className="close_btn" onClick={() => setSetUpTip(false)}>
-          Close
-        </div>
-      </div>
-    );
-  };
+
   return (
     <>
     <PageHeader></PageHeader>
@@ -453,19 +272,7 @@ const Swap = (props) => {
         <p className="mt-4 text-[#676565]">✔ Competitive exchange rates</p>
       </div>
       <div className="swap_container">
-        {/* <div className="swap_setup">
-          <Tooltip
-            title={setTip}
-            arrow={false}
-            placement="bottomRight"
-            trigger="click"
-            overlayClassName="setup_tip"
-            open={setUpTip}
-            onOpenChange={(open) => setSetUpTip(open)}
-          >
-            <img src={setup} alt="" />
-          </Tooltip>
-        </div> */}
+
         <div
           className="card card_buy card_selected"
           // onClick={() => setSelected(false)}
@@ -485,22 +292,8 @@ const Swap = (props) => {
                 )}
                 <div className="ml-6 text-[20px] h-[32px] leading-[32px]">{buyToken?.currency}</div>
               </div>
-              {/* <TokenSelection
-                tokenList={currency}
-                acToken={sellToken}
-                setAcToken={setSellToken}
-                selectedToken={buyToken}
-              /> */}
             </div>
           </div>
-          {/* <div className="money_curr">
-            <div>€{sellPrice}</div>
-            {sellToken.token && (
-              <div className="money_num">
-                0 USDT <div className="money_max">Max</div>
-              </div>
-            )}
-          </div> */}
         </div>
         <div
           className="exchange"
@@ -567,73 +360,7 @@ const Swap = (props) => {
             </div>
           )}
         </div>
-        {/* {btnStatus === 2 && (
-          <div className={showMore ? "more_info more_info_show" : "more_info"}>
-            <div className="info_item">
-              <span className="info_name">
-                1 {moreInfo.sellName} = {moreInfo.buy} {moreInfo.buyName}
-              </span>
-              <span className="info_value" onClick={() => setShowMore(!showMore)}>
-                <span className="info_value_num">
-                  <Tooltip
-                    title={exchangeTip}
-                    trigger={["hover", "click"]}
-                    color="white"
-                    className={showMore ? "info_value_tip info_value_tip_hide" : "info_value_tip"}
-                  >
-                    <img src={trade} alt="" className="trade_icon" />
-                    <span>US${moreInfo.value}</span>
-                  </Tooltip>
-                </span>
-                <img src={arrow} alt="" className={showMore ? "arrow_icon arrow_icon_show" : "arrow_icon"} />
-              </span>
-            </div>
-            <div className="info_item">
-              <span className="info_name">
-                <span>Fee (0.25%)</span>
-              </span>
-              <span className="info_value">
-                <span className="info_value_text">
-                  {moreInfo.fee} {moreInfo.symbol}
-                </span>
-              </span>
-            </div>
-            <div className="info_item">
-              <span className="info_name">
-                <span>Network cost</span>
-              </span>
-              <span className="info_value">
-                <span className="info_value_text">${moreInfo.network}</span>
-              </span>
-            </div>
-            <div className="info_item">
-              <span className="info_name">
-                <span>Order routing</span>
-              </span>
-              <span className="info_value">
-                <span className="info_value_text">{moreInfo.routing}</span>
-              </span>
-            </div>
-            <div className="info_item">
-              <span className="info_name">
-                <span>Price impact</span>
-              </span>
-              <span className="info_value">
-                {moreInfo.increase ? "+" : "-"}
-                {moreInfo.price}%
-              </span>
-            </div>
-            <div className="info_item">
-              <span className="info_name">
-                <span>Max slippage</span>
-              </span>
-              <span className="info_value">
-                <span className="info_value_auto">Anto</span>
-                <span className="info_value_text">{moreInfo.slippage}%</span>
-              </span>
-            </div>
-          </div>
-        )} */}
+
       </div>
 
       {/* 确认弹窗 */}
@@ -655,9 +382,6 @@ const Swap = (props) => {
               {sellAmount ? sellAmount : 0} {buyToken?.currency}
             </div>
           </div>
-          {/* <div className="item_icon">
-            <img src={sellToken.image} alt="" />
-          </div> */}
         </div>
         <div className="token_arrow">
           <ArrowDownOutlined className="exchange_icon" style={{ fontSize: "16px", color: "#BFBFBF" }} />
@@ -672,79 +396,23 @@ const Swap = (props) => {
             <img src={buyToken.image} alt="" />
           </div>
         </div>
-        {/* <div className="confim_info">
-          <div className="confim_info_item">
-            <span>Fee (0.25%)</span>
-            <span> &lt;$0.1</span>
-          </div>
-          <div className="confim_info_item">
-            <span>Network cost</span>
-            <span> &lt;$0.1</span>
-          </div>
-          <div className="confim_info_item">
-            <span>Rate</span>
-            <span> &lt;$0.1</span>
-          </div>
-          <div className="confim_info_item">
-            <span>Max slippage</span>
-            <div className="slippage">
-              <div className="auto">Auto</div>
-              <span>1%</span>
-            </div>
-          </div>
-        </div> */}
 
         <div className="confim_btn" onClick={confirmExchange}>
           Swap
         </div>
       </Modal>
 
-      {/* 下单成功弹窗 */}
-      <Modal
-        open={orderModal}
-        onCancel={() => {
-          setOrderModal(false);
-          setIframeSrc("")
-        }}
-        centered={true}
-        closable={true}
-        footer={null}
-        maskClosable={false}
-        className="order_model"
-      >
-        <div className="mt-[25px] h-[80vh]">
-          <iframe width="100%" height="100%" src={iframeSrc} frameborder="0"></iframe>
-        </div>
-      </Modal>
-
-       {/* 订单信息 */}
-       <Modal
-        open={infoModal}
-        onCancel={() => {
-          setInfoModal(false);
-          setInfoIframeSrc("");
-        }}
-        title="Order information"
-        centered={true}
-        closable={true}
-        footer={null}
-        maskClosable={false}
-        className="order_model"
-      >
-        <div className="mt-[25px] h-[20vh] cursor-pointer flex justify-center items-center">
-          {infoIframeSrc ? <div className="w-full">
-            <div className="w-full text-[#28a0f0] break-words pt-[10px] pb-[20px]" onClick={() => {
-            window.open(infoIframeSrc)
-           }}>{infoIframeSrc}</div>
-          <div className="w-[80px] rounded-md pt-4 pb-4 bg-[#28a0f0] text-[#fff] text-center m-auto"
-           onClick={() => {
-            window.open(infoIframeSrc)
-           }}
-          >open</div>
-          </div> : <Spin  />  }
-          
-        </div>
-      </Modal>
+      <IframeModals
+          orderModal={orderModal}
+          setOrderModal={setOrderModal}
+          iframeSrc={iframeSrc}
+          setIframeSrc={setIframeSrc}
+          infoModal={infoModal}
+          setInfoModal={setInfoModal}
+          infoIframeSrc={infoIframeSrc}
+          setInfoIframeSrc={setInfoIframeSrc}
+          orderNo={orderNo}
+        ></IframeModals>
     </div>
     </>
     
