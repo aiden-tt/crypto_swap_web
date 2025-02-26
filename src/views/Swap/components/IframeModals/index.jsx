@@ -49,6 +49,7 @@ const IframeModals = ({
             type: "error",
             content: data?.msg,
           });
+          clearInterval(window.orderTimer);
         }
       } catch (error) {
         console.log(error);
