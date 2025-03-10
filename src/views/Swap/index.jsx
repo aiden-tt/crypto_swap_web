@@ -165,7 +165,6 @@ const Swap = (props) => {
     handleCancelModal();
   };
 
-
   // 在组件卸载时清除定时器
   useEffect(() => {
     return () => {
@@ -213,23 +212,20 @@ const Swap = (props) => {
     setAddress(wagmiAddress);
   }, [wagmiAddress]);
 
-
-
   return (
     <>
       <PageHeader></PageHeader>
       <div className="swap">
         {contextHolder}
         <div className="w-full max-w-[800px] mx-auto px-4 py-8 text-center">
-          <h2 className="font-bold text-[30px] text-[#ffffff]">
-            REKT Token launches on Arbitrum l2 - Now with Fiat Purchase Support!
+          <h2 className="font-bold text-[30px] text-[#ffffff] mt-[70px]">
+          $Arenavault Token launches on Arbitrum L2 - Now with Fiat Purchase support!
           </h2>
-          <p className="mt-10 text-[14px] text-[#676565]">
-            Get ready! $REkTarb is making its grand debut on Arbitrum L2, offering lightning-fast transactions and lower
-            fees. The best part? You can now buy $REKTarb directly with fiat, making it easier than ever to jump in and
-            be part of the action!
+          <p className="mt-10 text-[14px] text-[#ffffff]">
+            Get ready! $Arenavault arb is making its grand debut on Arbitrum L2, offering lightning-fast transactions
+            and lower fees. Thebest part? You can now buy $Arenavault arb directly with fiat, making it easier than ever
+            to jump in and be part of the action!
           </p>
-          <p className="mt-10 mb-10 text-[#676565]"></p>
         </div>
         <div className="swap_container">
           <div
@@ -254,9 +250,7 @@ const Swap = (props) => {
               </div>
             </div>
           </div>
-          <div
-            className="exchange"
-          >
+          <div className="exchange">
             <div className="exchange_box">
               <ArrowDownOutlined className="exchange_icon" style={{ fontSize: "20px", color: "rgb(34, 34, 34)" }} />
             </div>
